@@ -1,0 +1,418 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="FEDSMBRModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Cellphone" Type="varchar" MaxLength="20" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Account" Type="varchar" MaxLength="100" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Gender" Type="varchar" MaxLength="10" />
+          <Property Name="Birthday" Type="datetime" />
+          <Property Name="RocId" Type="varchar" MaxLength="20" />
+          <Property Name="ZipCode" Type="varchar" MaxLength="5" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" />
+          <Property Name="Area" Type="nvarchar" MaxLength="50" />
+          <Property Name="Road" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar" MaxLength="200" />
+          <Property Name="MobileCarrier" Type="char" MaxLength="8" />
+          <Property Name="NotifySMS" Type="int" Nullable="false" />
+          <Property Name="NotifyDM" Type="int" Nullable="false" />
+          <Property Name="FbId" Type="varchar" MaxLength="100" />
+          <Property Name="GeId" Type="varchar" MaxLength="100" />
+          <Property Name="LineId" Type="nvarchar(max)" />
+          <Property Name="AppleId" Type="varchar" MaxLength="100" />
+          <Property Name="HgpId" Type="varchar" MaxLength="32" />
+          <Property Name="ApId" Type="nvarchar" MaxLength="20" />
+          <Property Name="TempHgCardNo" Type="varchar" MaxLength="50" />
+          <Property Name="HgCardNo" Type="varchar" MaxLength="50" />
+          <Property Name="HgAgreeDate" Type="datetime" />
+          <Property Name="HgValidDate" Type="datetime" />
+          <Property Name="RealValidDate" Type="datetime" />
+          <Property Name="PdpAgreeDate" Type="datetime" />
+          <Property Name="PersonContactId" Type="nvarchar(max)" />
+          <Property Name="EventNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" />
+          <Property Name="LastAccessIP" Type="varchar" MaxLength="20" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="Note" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="MemberCellphoneValid">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberId" Type="int" Nullable="false" />
+          <Property Name="Cellphone" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Code" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="ExpireDate" Type="datetime" Nullable="false" />
+          <Property Name="ValidDate" Type="datetime" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'FEDSMBR.dbo.MemberCellphoneValidDuplicate' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="MemberCellphoneValidDuplicate">
+          <Key>
+            <PropertyRef Name="Messages" />
+          </Key>
+          <Property Name="Cellphone" Type="varchar" MaxLength="20" />
+          <Property Name="Count" Type="int" />
+          <Property Name="Messages" Type="varchar" MaxLength="33" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MemberEmailValid">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberId" Type="int" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Code" Type="varchar" MaxLength="36" Nullable="false" />
+          <Property Name="ExpireDate" Type="datetime" Nullable="false" />
+          <Property Name="ValidDate" Type="datetime" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'FEDSMBR.dbo.MemberEmailValidDuplicate' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="MemberEmailValidDuplicate">
+          <Key>
+            <PropertyRef Name="Messages" />
+          </Key>
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Count" Type="int" />
+          <Property Name="Messages" Type="varchar" MaxLength="21" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MemberLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ApId" Type="int" />
+          <Property Name="MemberId" Type="int" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="Event" Type="nvarchar" MaxLength="50" />
+          <Property Name="DataJsonString" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK_MemberCellphoneValid_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="1" />
+          <End Role="MemberCellphoneValid" Type="Self.MemberCellphoneValid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MemberCellphoneValid">
+              <PropertyRef Name="MemberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberEmailValid_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="1" />
+          <End Role="MemberEmailValid" Type="Self.MemberEmailValid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MemberEmailValid">
+              <PropertyRef Name="MemberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FEDSMBRModelStoreContainer">
+          <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MemberCellphoneValid" EntityType="Self.MemberCellphoneValid" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MemberEmailValid" EntityType="Self.MemberEmailValid" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MemberLog" EntityType="Self.MemberLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MemberCellphoneValidDuplicate" EntityType="Self.MemberCellphoneValidDuplicate" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [MemberCellphoneValidDuplicate].[Cellphone] AS [Cellphone], 
+    [MemberCellphoneValidDuplicate].[Count] AS [Count], 
+    [MemberCellphoneValidDuplicate].[Messages] AS [Messages]
+    FROM [dbo].[MemberCellphoneValidDuplicate] AS [MemberCellphoneValidDuplicate]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="MemberEmailValidDuplicate" EntityType="Self.MemberEmailValidDuplicate" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [MemberEmailValidDuplicate].[Email] AS [Email], 
+    [MemberEmailValidDuplicate].[Count] AS [Count], 
+    [MemberEmailValidDuplicate].[Messages] AS [Messages]
+    FROM [dbo].[MemberEmailValidDuplicate] AS [MemberEmailValidDuplicate]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_MemberCellphoneValid_Member" Association="Self.FK_MemberCellphoneValid_Member">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="MemberCellphoneValid" EntitySet="MemberCellphoneValid" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberEmailValid_Member" Association="Self.FK_MemberEmailValid_Member">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="MemberEmailValid" EntitySet="MemberEmailValid" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FEDSMBRModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Cellphone" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Account" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Birthday" Type="DateTime" Precision="3" />
+          <Property Name="RocId" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ZipCode" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Area" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Road" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MobileCarrier" Type="String" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="NotifySMS" Type="Int32" Nullable="false" />
+          <Property Name="NotifyDM" Type="Int32" Nullable="false" />
+          <Property Name="FbId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="GeId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="LineId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AppleId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="HgpId" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="ApId" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="TempHgCardNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="HgCardNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="HgAgreeDate" Type="DateTime" Precision="3" />
+          <Property Name="HgValidDate" Type="DateTime" Precision="3" />
+          <Property Name="RealValidDate" Type="DateTime" Precision="3" />
+          <Property Name="PdpAgreeDate" Type="DateTime" Precision="3" />
+          <Property Name="PersonContactId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EventNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EditDate" Type="DateTime" Precision="3" />
+          <Property Name="LastAccessIP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="MemberCellphoneValid" Relationship="Self.FK_MemberCellphoneValid_Member" FromRole="Member" ToRole="MemberCellphoneValid" />
+          <NavigationProperty Name="MemberEmailValid" Relationship="Self.FK_MemberEmailValid_Member" FromRole="Member" ToRole="MemberEmailValid" />
+        </EntityType>
+        <EntityType Name="MemberCellphoneValid">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberId" Type="Int32" Nullable="false" />
+          <Property Name="Cellphone" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Code" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ExpireDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ValidDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Member" Relationship="Self.FK_MemberCellphoneValid_Member" FromRole="MemberCellphoneValid" ToRole="Member" />
+        </EntityType>
+        <EntityType Name="MemberEmailValid">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberId" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Code" Type="String" MaxLength="36" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ExpireDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ValidDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Member" Relationship="Self.FK_MemberEmailValid_Member" FromRole="MemberEmailValid" ToRole="Member" />
+        </EntityType>
+        <EntityType Name="MemberLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApId" Type="Int32" />
+          <Property Name="MemberId" Type="Int32" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="Event" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DataJsonString" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="MemberCellphoneValidDuplicate">
+          <Key>
+            <PropertyRef Name="Messages" />
+          </Key>
+          <Property Name="Cellphone" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Count" Type="Int32" />
+          <Property Name="Messages" Type="String" MaxLength="33" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MemberEmailValidDuplicate">
+          <Key>
+            <PropertyRef Name="Messages" />
+          </Key>
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Count" Type="Int32" />
+          <Property Name="Messages" Type="String" MaxLength="21" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_MemberCellphoneValid_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="1" />
+          <End Role="MemberCellphoneValid" Type="Self.MemberCellphoneValid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MemberCellphoneValid">
+              <PropertyRef Name="MemberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberEmailValid_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="1" />
+          <End Role="MemberEmailValid" Type="Self.MemberEmailValid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MemberEmailValid">
+              <PropertyRef Name="MemberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FEDSMBREntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Member" EntityType="Self.Member" />
+          <EntitySet Name="MemberCellphoneValid" EntityType="Self.MemberCellphoneValid" />
+          <EntitySet Name="MemberEmailValid" EntityType="Self.MemberEmailValid" />
+          <EntitySet Name="MemberLog" EntityType="Self.MemberLog" />
+          <EntitySet Name="MemberCellphoneValidDuplicate" EntityType="Self.MemberCellphoneValidDuplicate" />
+          <EntitySet Name="MemberEmailValidDuplicate" EntityType="Self.MemberEmailValidDuplicate" />
+          <AssociationSet Name="FK_MemberCellphoneValid_Member" Association="Self.FK_MemberCellphoneValid_Member">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="MemberCellphoneValid" EntitySet="MemberCellphoneValid" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberEmailValid_Member" Association="Self.FK_MemberEmailValid_Member">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="MemberEmailValid" EntitySet="MemberEmailValid" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FEDSMBRModelStoreContainer" CdmEntityContainer="FEDSMBREntities">
+          <EntitySetMapping Name="Member">
+            <EntityTypeMapping TypeName="FEDSMBRModel.Member">
+              <MappingFragment StoreEntitySet="Member">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Cellphone" ColumnName="Cellphone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Account" ColumnName="Account" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="RocId" ColumnName="RocId" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="Road" ColumnName="Road" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="MobileCarrier" ColumnName="MobileCarrier" />
+                <ScalarProperty Name="NotifySMS" ColumnName="NotifySMS" />
+                <ScalarProperty Name="NotifyDM" ColumnName="NotifyDM" />
+                <ScalarProperty Name="FbId" ColumnName="FbId" />
+                <ScalarProperty Name="GeId" ColumnName="GeId" />
+                <ScalarProperty Name="LineId" ColumnName="LineId" />
+                <ScalarProperty Name="AppleId" ColumnName="AppleId" />
+                <ScalarProperty Name="HgpId" ColumnName="HgpId" />
+                <ScalarProperty Name="ApId" ColumnName="ApId" />
+                <ScalarProperty Name="TempHgCardNo" ColumnName="TempHgCardNo" />
+                <ScalarProperty Name="HgCardNo" ColumnName="HgCardNo" />
+                <ScalarProperty Name="HgAgreeDate" ColumnName="HgAgreeDate" />
+                <ScalarProperty Name="HgValidDate" ColumnName="HgValidDate" />
+                <ScalarProperty Name="RealValidDate" ColumnName="RealValidDate" />
+                <ScalarProperty Name="PdpAgreeDate" ColumnName="PdpAgreeDate" />
+                <ScalarProperty Name="PersonContactId" ColumnName="PersonContactId" />
+                <ScalarProperty Name="EventNo" ColumnName="EventNo" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="LastAccessIP" ColumnName="LastAccessIP" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberCellphoneValid">
+            <EntityTypeMapping TypeName="FEDSMBRModel.MemberCellphoneValid">
+              <MappingFragment StoreEntitySet="MemberCellphoneValid">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="MemberId" ColumnName="MemberId" />
+                <ScalarProperty Name="Cellphone" ColumnName="Cellphone" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="ExpireDate" ColumnName="ExpireDate" />
+                <ScalarProperty Name="ValidDate" ColumnName="ValidDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberEmailValid">
+            <EntityTypeMapping TypeName="FEDSMBRModel.MemberEmailValid">
+              <MappingFragment StoreEntitySet="MemberEmailValid">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="MemberId" ColumnName="MemberId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="ExpireDate" ColumnName="ExpireDate" />
+                <ScalarProperty Name="ValidDate" ColumnName="ValidDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberLog">
+            <EntityTypeMapping TypeName="FEDSMBRModel.MemberLog">
+              <MappingFragment StoreEntitySet="MemberLog">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ApId" ColumnName="ApId" />
+                <ScalarProperty Name="MemberId" ColumnName="MemberId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Event" ColumnName="Event" />
+                <ScalarProperty Name="DataJsonString" ColumnName="DataJsonString" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberCellphoneValidDuplicate">
+            <EntityTypeMapping TypeName="FEDSMBRModel.MemberCellphoneValidDuplicate">
+              <MappingFragment StoreEntitySet="MemberCellphoneValidDuplicate">
+                <ScalarProperty Name="Cellphone" ColumnName="Cellphone" />
+                <ScalarProperty Name="Count" ColumnName="Count" />
+                <ScalarProperty Name="Messages" ColumnName="Messages" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberEmailValidDuplicate">
+            <EntityTypeMapping TypeName="FEDSMBRModel.MemberEmailValidDuplicate">
+              <MappingFragment StoreEntitySet="MemberEmailValidDuplicate">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Count" ColumnName="Count" />
+                <ScalarProperty Name="Messages" ColumnName="Messages" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

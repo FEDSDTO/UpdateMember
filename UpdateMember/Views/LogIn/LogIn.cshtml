@@ -1,0 +1,103 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>遠東百貨 會員資料修改系統</title>
+    <link rel="shortcut icon" href="https://www.feds.com.tw/favicon.ico" type="image/x-icon" />
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <link href="~/Content/windowAlert.css?v0.1" rel="stylesheet" />
+    <script src="~/Scripts/windowAlert.js"></script>
+</head>
+<body style="background-color:#f1efef;font-family:'Microsoft JhengHei'">
+    <div>
+        <div style="width: 320px;height: 550px;border-radius: 10px;border-color: #9f9f9f;padding: 5px;position: absolute;left: 50%;top: 50%;margin-top: -270px;margin-left: -170px;background-color:#ffffff">
+            @using (Html.BeginForm("LogIn", "LogIn", FormMethod.Post, new { @id = "LogInForm" }))
+            {
+
+                <div style="width:320px;height:220px;border-radius: 10px;background-size:cover;background-image: url('../Image/Login-background.jpeg');">
+                    <div style="background-color:#ffffff;width:140px;height:140px;border-radius:50%;position:relative;left:27%;top:45%;">
+                        <img style="position:relative;width:110px;height:auto;margin-top: 22px;margin-left:14px" src="~/Image/FEDS-Ball.png" />
+                    </div>
+                </div>
+                <div id="main" class="main" style="width:320px;height:300px;text-align:center;line-height:35PX;margin-top: 35px;">
+                    <div style="margin-top: 12px;">
+                        <span style="font-size:xx-large;font-weight:bold;">遠東百貨</span><br>
+                        <span style="font-size:11px">FAR EASTERN DEPARTMEMT STORES</span><br>
+                        <span style="font-size:14px">-會員資料管理系統-</span>
+                    </div>
+                    <div style="padding:15px;width:200px;line-height:40px;margin-top: 15px;font-size:14px;margin:0px auto">
+                        <input type="text" name="userNo" placeholder="請輸入工號" style="padding:7px" value="@ViewBag.userNo" /><br>
+                        <input type="password" name="userPassword" placeholder="請輸入密碼" style="padding:7px" value="@ViewBag.userPassword" /><br>
+                        @*<div style="float:left"><input type="radio" name="remmber" />記住我</div>*@
+                        <div style="float:right;color:red">@ViewBag.LogInErro</div>
+
+                    </div>
+                    <div class="bottom" style="margin-top:-10px;line-height:30px;margin:0 auto">
+                        <input id="btnLogIn" type="button" onfocus="Submit()" onclick="Submit()" style="font-size:20px;width:220px;height:40px;color:#FFFFFF;background-color:#fc9618;border-radius: 10px;border-color:#ffffff" value="登入" />
+                        @*<input type="checkbox" name="forget" />忘記密碼?*@
+                    </div>
+
+
+                </div>
+            }
+        </div>
+    </div>
+
+
+</body>
+</html>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var focusItem = null;
+        var inputs = $('input');
+        $('input').focus(function () {
+            focusItem = inputs.index($(this));
+        });
+
+        $(document).keydown(function (event) {
+            if (event.keyCode == 13) {  //如果按 enter
+                //跳下一個欄位
+                inputs.eq((focusItem + 1)).focus();
+            }
+        });
+
+        function Submit() {
+            var form = $('#LogInForm');
+            var data = form.serialize();
+            var validator = form.validate();
+
+            $.ajax({
+                url: '@Url.Action("LogIn")',
+                type: 'POST',
+                data: data,
+                async: false,
+                dataType: 'json'
+            }).done(function (result) {
+                //console.log(result);
+
+                if (result.IsSuccess == false) {
+                    swal(
+                        '登入失敗',
+                        '請輸入有效工號或密碼',
+                        'error'
+                    )
+                }
+                else {
+                    location.href="@Url.Action( "Index", "UpdateMember")";
+                }
+
+            })
+        }
+
+        $("#btnLogIn").click(function () {
+            Submit();
+        })
+    })
+</script>

@@ -1,0 +1,250 @@
+﻿@model UpdateMember.ViewModel._VResult._VMmember
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <link href="~/Content/bootstrap.min.css?v0.2" rel="stylesheet" />
+    <link href="~/Content/Errorword.css?v0.6"  rel="stylesheet" type="text/css" />
+</head>
+<body style="margin:0;padding:0;font-family:'Microsoft JhengHei'">
+    <div style="height:55px;width:90%;border-bottom:2px solid #808080;margin:0 auto;margin-top:20px">
+        <h3 class="title-UserInfo">會員資料編輯</h3>
+    </div>
+    @using (Html.BeginForm("UpdateDetail", "UpdateMember", FormMethod.Post, new { @id = "UpdateForm" }))
+    {
+        
+        <div>
+            <div class="detail" style="width:90%;margin:0 auto;">
+                <div class="detail-body" style="line-height:30px;margin-top:40px">
+                    <div class="form-group row">
+                        @Html.LabelFor(model => model.ID, new { @class = "col-md-2 col-lg-2 control-label right" })
+                        <div class="col-md-4">
+                            @Html.DisplayFor(model => model.ID, new { @class = "form-control", @id = "m_Id" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2 col-lg-2 control-label right">原HappyGo卡號</div>
+                        <div class="col-md-4">
+                            @Html.DisplayFor(model => model.THappyGoCard, new { @class = "col-md-2 col-lg-1 control-label right" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2 col-lg-2 control-label right">實名制認證</div>
+                        <div class="col-md-4">
+                            @Html.DisplayFor(model => model.RealVerifyDate, new { @class = "col-md-2 col-lg-1 control-label right" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2 col-lg-2 control-label right">HG卡認證</div>
+                        <div class="col-md-4">
+                            @Html.DisplayFor(model => model.HgValidDate, new { @class = "col-md-2 col-lg-1 control-label right" })
+                        </div>
+                    </div>
+                    @Html.ValidationSummary()
+                    <div class="form-group row">
+                        <div class="col-md-2 col-lg-2 control-label right">姓名</div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2 col-lg-2 control-label right">身分證</div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.ROCId, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2 col-lg-2 control-label right">生日</div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.Birthday, new { @class = "form-control", @id = "ui-datepicker" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2 col-lg-2 control-label right">性別</div>
+                        <div class="col-md-4">
+                            @*@Html.TextBoxFor(model => model.Gender, new { @class = "form-control" })*@
+                            @Html.DropDownListFor(model => model.Gender, (SelectList)ViewBag.genderList, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2 col-lg-2 control-label right">電話</div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.Phone, new { @class = "form-control", @id = "m_phone", @onchange = "warningPhone()" })
+                            <div >✿ 更改電話將會自動驗證此號碼，請務必檢查電話號碼輸入正確與否！✿</div>
+                            <div class="" id="warning_phone" style="display: none">*更改前，必先確認此電話為本人所有，否則將會刪除他人個資！</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2 col-lg-2 control-label right">信箱</div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @id = "m_email", @onchange = "checkEmail()" })
+                            <div class="" id="warning_email" style="display: none">*更改前，必先確認此信箱為本人所有，否則將會刪除他人個資！</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2 col-lg-2 control-label right">HappyGo卡號</div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.HappyGoCard, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2 col-lg-2 control-label right">信箱驗證日期</div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.EmailValidDate, new { @class = "form-control", @id = "uii-datepicker", @readonly = "readonly" })
+                            <div style="padding: 5px">
+                                <button type="button" class="btn btn-outline-primary" id="btnVerify" style="display: none">驗證</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2 col-lg-2 control-label right">電話驗證日期</div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.PhoneValidDate, new { @class = "form-control", @id = "uiii-datepicker", @readonly = "readonly" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2 col-lg-2 control-label right">帳號狀態</div>
+                        <div class="col-md-4">
+                            @*@Html.DropDownList("name", (SelectList)ViewBag.statusList)*@
+                            @*@Html.TextBoxFor(model => model.Status, new { @class = "form-control" })*@
+                            @Html.DropDownListFor(model => model.Status, (SelectList)ViewBag.statusList, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="float:right">
+                    <button type="button" class="btn btn-outline-primary" id="btnSave">儲存</button>
+                </div>
+            </div>
+        </div>
+    }
+
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <link href="~/Content/windowAlert.css" rel="stylesheet" />
+    <script src="~/Scripts/windowAlert.js"></script>
+    <link href="~/Scripts/fancybox/dist/jquery.fancybox.min.css" rel="stylesheet" />
+    <script src="~/Scripts/fancybox/dist/jquery.fancybox.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+</body>
+</html>
+<script type="text/javascript">
+    const email_t = $('#m_email').val();
+    const email_v = $('#uii-datepicker').val();
+    const phone_t = $('#m_phone').val();
+    $(document).ready(function () {
+        btnVerify();
+        $("#btnSave").click(function () {
+
+            var form = $('#UpdateForm');
+            var data = form.serialize();
+            var validator = form.validate();
+
+            $.ajax({
+                url: '@Url.Action("UpdateDetail")',
+                type: 'POST',
+                data: data,
+                async: false,
+                dataType: 'json'
+            }).done(function (result) {
+                console.log(result);
+
+                if (result.IsSuccess == true) {
+                    swal(
+                        '會員基本資料【編輯】',
+                        '資料儲存成功',
+                        'success'
+                    )
+                }
+                else {
+                    validator.showErrors(result.ModelStateErrors);
+                    //alert('失敗');
+                    //alert(data.ModelStateErrors.TestError);
+                }
+            })
+        });
+
+        $("#btnVerify").click(function () {
+            var email = $('#m_email').val();
+            if (email == null || email == "") {
+                swal(
+                    '會員資料缺失',
+                    '請輸入會員Email',
+                    'error'
+                )
+                return false;
+            }
+            else {
+                var eDate = document.getElementById('uii-datepicker');
+                var _now = new Date();
+                eDate.value = _now.getFullYear() + "/" + ("0" + (_now.getMonth() + 1)).slice(-2) + "/" +
+                    ("0" + _now.getDate()).slice(-2) + " " +
+                    ("0" + _now.getHours()).slice(-2) + ":" +
+                    ("0" + _now.getMinutes()).slice(-2) + ":" +
+                    ("0" + _now.getSeconds()).slice(-2) + "." +
+                    ("0" + _now.getMilliseconds()).slice(-3);
+            }
+        })
+    });
+
+    //改變會員電話+自動驗證電話
+    function warningPhone() {
+        document.getElementById('warning_phone').style.display = '';
+        var phone = $('#m_phone').val();
+        if (phone != null && phone != "") {
+            if (phone != phone_t ) {
+                var pDate = document.getElementById('uiii-datepicker');
+                var _now = new Date();
+                pDate.value = _now.getFullYear() + "/" + ("0" + (_now.getMonth() + 1)).slice(-2) + "/" +
+                    ("0" + _now.getDate()).slice(-2) + " " +
+                    ("0" + _now.getHours()).slice(-2) + ":" +
+                    ("0" + _now.getMinutes()).slice(-2) + ":" +
+                    ("0" + _now.getSeconds()).slice(-2) + "." +
+                    ("0" + _now.getMilliseconds()).slice(-3);
+            }
+        }
+    }
+    function checkEmail() {
+        document.getElementById('warning_email').style.display = '';
+        var email = $('#m_email').val();
+        var email_v = document.getElementById('uii-datepicker');
+        if (email != null && email != "") {
+            document.getElementById('btnVerify').style.display = '';
+            email_v.value = "";
+        };
+    }
+    function btnVerify() {
+        if (email_t != null && (email_v == null || email_v == "")) {
+            document.getElementById('btnVerify').style.display = '';
+        }
+    }
+    //function checkPhone() {
+    //    var phone = $('#m_phone').val();
+    //    if (phone == null || phone == "") {
+    //        swal(
+    //            '會員資料缺失',
+    //            '請輸入會員電話',
+    //            'error'
+    //        )
+    //        return false;
+    //    };
+    //}
+</script>
+<script>
+    $(function () {
+        $("#ui-datepicker").datepicker();
+    });
+    //$(function () {
+    //    $("#uii-datepicker").datepicker();
+    //});
+    //$(function () {
+    //    $("#uiii-datepicker").datepicker();
+    //});
+</script>
