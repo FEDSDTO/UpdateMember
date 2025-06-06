@@ -2,23 +2,27 @@
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title></title>
     <link href="~/Content/bootstrap.min.css?v0.2" rel="stylesheet" />
-    <link href="~/Content/Errorword.css?v0.6"  rel="stylesheet" type="text/css" />
+    <link href="~/Content/Errorword.css?v0.6" rel="stylesheet" type="text/css" />
 </head>
 <body style="margin:0;padding:0;font-family:'Microsoft JhengHei'">
-    <div style="height:55px;width:90%;border-bottom:2px solid #808080;margin:0 auto;margin-top:20px">
+    <div style="height:55px;width:90%;border-bottom:2px solid #808080;margin:0 auto;margin-top:20px;display:flex;justify-content:space-between">
         <h3 class="title-UserInfo">會員資料編輯</h3>
+        <p style="font-size:28px;color:#808080;line-height:1.2;" id="showLogOutTime">
+            <script>
+                //showLogOutTime null 顯示空字串
+                document.getElementById("showLogOutTime").innerText = "自動登出時間：" + (sessionStorage.getItem("showLogOutTime") || "");
+            </script>
+        </p>
     </div>
     @using (Html.BeginForm("UpdateDetail", "UpdateMember", FormMethod.Post, new { @id = "UpdateForm" }))
     {
-        
+
         <div>
             <div class="detail" style="width:90%;margin:0 auto;">
                 <div class="detail-body" style="line-height:30px;margin-top:40px">
@@ -26,6 +30,12 @@
                         @Html.LabelFor(model => model.ID, new { @class = "col-md-2 col-lg-2 control-label right" })
                         <div class="col-md-4">
                             @Html.DisplayFor(model => model.ID, new { @class = "form-control", @id = "m_Id" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2 col-lg-2 control-label right">會員卡號</div>
+                        <div class="col-md-4">
+                            @Html.DisplayFor(model => model.MemberCardNo, new { @class = "col-md-2 col-lg-1 control-label right" })
                         </div>
                     </div>
                     <div class="form-group row">
@@ -46,11 +56,12 @@
                             @Html.DisplayFor(model => model.HgValidDate, new { @class = "col-md-2 col-lg-1 control-label right" })
                         </div>
                     </div>
-                    @Html.ValidationSummary()
+                    @*@Html.ValidationSummary()*@
                     <div class="form-group row">
                         <div class="col-md-2 col-lg-2 control-label right">姓名</div>
                         <div class="col-md-4">
                             @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Name)
                         </div>
                     </div>
                     <div class="form-group row">
@@ -76,7 +87,7 @@
                         <div class="col-md-2 col-lg-2 control-label right">電話</div>
                         <div class="col-md-4">
                             @Html.TextBoxFor(model => model.Phone, new { @class = "form-control", @id = "m_phone", @onchange = "warningPhone()" })
-                            <div >✿ 更改電話將會自動驗證此號碼，請務必檢查電話號碼輸入正確與否！✿</div>
+                            <div>✿ 更改電話將會自動驗證此號碼，請務必檢查電話號碼輸入正確與否！✿</div>
                             <div class="" id="warning_phone" style="display: none">*更改前，必先確認此電話為本人所有，否則將會刪除他人個資！</div>
                         </div>
                     </div>
@@ -89,10 +100,33 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-md-2 col-lg-2 control-label right">HappyGo卡號</div>
-                        <div class="col-md-4">
-                            @Html.TextBoxFor(model => model.HappyGoCard, new { @class = "form-control" })
-                        </div>
+                        @*<div class="col-md-4">
+                @Html.TextBoxFor(model => model.HappyGoCard, new { @class = "form-control" })
+                <div>✿ 開通虛擬卡前請先確認個資是否填寫完整！✿</div>
+                <div>✿ 若開通虛擬卡無法反應，請確認相關個資與HG端是否不一致！✿</div>
+            </div>*@
+                        @if (string.IsNullOrEmpty(Model.HappyGoCard))
+                        {
+                            <div class="col-md-4">
+                                <button type="button" class="btn btn-info" id="btnHG">開通HG虛擬卡</button>
+                                @*<a class="btn btn-info" href="@Url.Action("HGValidation","UpdateMember", new { Id = Model.ID})">開通HG虛擬卡 (測試)</a>*@
+                                <div>✿ 開通虛擬卡前請先確認個資是否填寫完整！✿</div>
+                                <div>✿ 若開通虛擬卡無法反應，請確認相關個資與HG端是否不一致！✿</div>
+                            </div>
+                            @*<div class="col-md-2 textHide">
+                    @Html.TextBoxFor(model => model.MbToken, new { @class = "form-control", @id = "m_MbToken" })
+                </div>*@
+                        }
+                        else
+                        {
+                            <div class="col-md-4">
+                                @Html.TextBoxFor(model => model.HappyGoCard, new { @class = "form-control", @readonly = "readonly" })
+                                @*<div>✿ 開通虛擬卡前請先確認個資是否填寫完整！✿</div>
+                    <div>✿ 若開通虛擬卡無法反應，請確認相關個資與HG端是否不一致！✿</div>*@
+                            </div>
+                        }
                     </div>
+
                     <div class="form-group row">
                         <div class="col-md-2 col-lg-2 control-label right">信箱驗證日期</div>
                         <div class="col-md-4">
@@ -116,6 +150,12 @@
                             @Html.DropDownListFor(model => model.Status, (SelectList)ViewBag.statusList, new { @class = "form-control" })
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <div class="col-md-2 col-lg-2 control-label right">手機條碼/載具</div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.MobileCarrier, new { @class = "form-control", @style = "text-transform:uppercase", @maxlength = "8" })
+                        </div>
+                    </div>
                 </div>
                 <div class="row" style="float:right">
                     <button type="button" class="btn btn-outline-primary" id="btnSave">儲存</button>
@@ -123,7 +163,6 @@
             </div>
         </div>
     }
-
     <script src="~/Scripts/jquery-3.3.1.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/bootstrap.js"></script>
@@ -133,42 +172,86 @@
     <script src="~/Scripts/fancybox/dist/jquery.fancybox.min.js"></script>
     <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
     <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Scripts/AutoLogOut.js"></script>
 </body>
 </html>
 <script type="text/javascript">
     const email_t = $('#m_email').val();
     const email_v = $('#uii-datepicker').val();
     const phone_t = $('#m_phone').val();
+    const mbToken = $('#m_MbToken').val();
     $(document).ready(function () {
         btnVerify();
+
+        $("#btnHG").click(function () {
+            $.ajax({
+                url: '@Url.Action($"HGValidation")',
+                type: 'POST',
+                data: {Id:@Model.ID},
+                async: false,
+                dataType: 'json'
+            }).done(function (result) {
+                if (result.IsSuccess == true) {
+                    swal(
+                        '開通HG虛擬卡',
+                        result.Message,
+                        'success'
+                    ).then(function () {
+                        setTimeout(function () { window.location.href = "@Url.Action("UpdateDetail")" }, 0);
+                    })
+                }
+                else {
+                    swal(
+                        '開通HG虛擬卡',
+                        result.Message,
+                        'error',
+                    )
+                }
+            })
+        });
+
         $("#btnSave").click(function () {
 
             var form = $('#UpdateForm');
             var data = form.serialize();
             var validator = form.validate();
+            var mobileCarrier = document.getElementById('MobileCarrier').value;
+            var mobileCarrierRules = new RegExp('^\/[A-Z0-9.+-]{7}')
+            if (mobileCarrierRules.test(mobileCarrier) || mobileCarrier.length == 0) {
+                $.ajax({
+                    url: '@Url.Action("UpdateDetail")',
+                    type: 'POST',
+                    data: data,
+                    async: false,
+                    dataType: 'json'
+                }).done(function (result) {
+                    if (result.IsSuccess == true) {
+                        swal(
+                            '會員基本資料【編輯】',
+                            '資料儲存成功',
+                            'success'
+                        )
+                    }
+                    else {
+                        //validator.showErrors(result.ModelStateErrors);
+                        //alert('失敗');
+                        //alert(data.ModelStateErrors.TestError);
+                        swal(
+                            '會員基本資料【編輯】',
+                            '資料儲存失敗',
+                            'error'
+                        )
+                    }
+                })
+            }
+            else {
+                swal(
+                    '會員基本資料【編輯】',
+                    '手機條碼/載具格式錯誤',
+                    'error'
+                )
+            }
 
-            $.ajax({
-                url: '@Url.Action("UpdateDetail")',
-                type: 'POST',
-                data: data,
-                async: false,
-                dataType: 'json'
-            }).done(function (result) {
-                console.log(result);
-
-                if (result.IsSuccess == true) {
-                    swal(
-                        '會員基本資料【編輯】',
-                        '資料儲存成功',
-                        'success'
-                    )
-                }
-                else {
-                    validator.showErrors(result.ModelStateErrors);
-                    //alert('失敗');
-                    //alert(data.ModelStateErrors.TestError);
-                }
-            })
         });
 
         $("#btnVerify").click(function () {
