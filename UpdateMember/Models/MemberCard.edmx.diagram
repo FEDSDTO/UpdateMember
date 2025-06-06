@@ -6,6 +6,8 @@
     <edmx:Diagrams>
       <Diagram DiagramId="a0d61ef3695c4b6cb8fd10b91020f85d" Name="Diagram1">
         <EntityTypeShape EntityType="MemberCardModel.UpdateMember_Log" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MemberCardModel.System_Log" Width="1.5" PointX="3.375" PointY="0.75" />
+        <EntityTypeShape EntityType="MemberCardModel.SystemError_Log" Width="1.5" PointX="3.375" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

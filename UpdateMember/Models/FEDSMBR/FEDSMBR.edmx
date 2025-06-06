@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="FEDSMBRModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="FEDSMBRModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Member">
           <Key>
             <PropertyRef Name="Id" />
@@ -99,6 +99,18 @@
           <Property Name="Event" Type="nvarchar" MaxLength="50" />
           <Property Name="DataJsonString" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="MemberToken">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ApId" Type="int" />
+          <Property Name="MemberId" Type="int" Nullable="false" />
+          <Property Name="Token" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ExpireDate" Type="datetime" />
+          <Property Name="NewMemberTokenId" Type="int" />
+          <Property Name="EntityStatus" Type="int" Nullable="false" />
+        </EntityType>
         <Association Name="FK_MemberCellphoneValid_Member">
           <End Role="Member" Type="Self.Member" Multiplicity="1" />
           <End Role="MemberCellphoneValid" Type="Self.MemberCellphoneValid" Multiplicity="*" />
@@ -123,11 +135,24 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MemberToken_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="1" />
+          <End Role="MemberToken" Type="Self.MemberToken" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MemberToken">
+              <PropertyRef Name="MemberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="FEDSMBRModelStoreContainer">
           <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberCellphoneValid" EntityType="Self.MemberCellphoneValid" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberEmailValid" EntityType="Self.MemberEmailValid" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberLog" EntityType="Self.MemberLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MemberToken" EntityType="Self.MemberToken" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberCellphoneValidDuplicate" EntityType="Self.MemberCellphoneValidDuplicate" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [MemberCellphoneValidDuplicate].[Cellphone] AS [Cellphone], 
@@ -150,9 +175,12 @@
             <End Role="Member" EntitySet="Member" />
             <End Role="MemberEmailValid" EntitySet="MemberEmailValid" />
           </AssociationSet>
+          <AssociationSet Name="FK_MemberToken_Member" Association="Self.FK_MemberToken_Member">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="MemberToken" EntitySet="MemberToken" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="FEDSMBRModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -198,6 +226,7 @@
           <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="MemberCellphoneValid" Relationship="Self.FK_MemberCellphoneValid_Member" FromRole="Member" ToRole="MemberCellphoneValid" />
           <NavigationProperty Name="MemberEmailValid" Relationship="Self.FK_MemberEmailValid_Member" FromRole="Member" ToRole="MemberEmailValid" />
+          <NavigationProperty Name="MemberToken" Relationship="FEDSMBRModel.FK_MemberToken_Member" FromRole="Member" ToRole="MemberToken" />
         </EntityType>
         <EntityType Name="MemberCellphoneValid">
           <Key>
@@ -289,7 +318,37 @@
             <End Role="Member" EntitySet="Member" />
             <End Role="MemberEmailValid" EntitySet="MemberEmailValid" />
           </AssociationSet>
+          <EntitySet Name="MemberToken" EntityType="FEDSMBRModel.MemberToken" />
+          <AssociationSet Name="FK_MemberToken_Member" Association="FEDSMBRModel.FK_MemberToken_Member">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="MemberToken" EntitySet="MemberToken" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="MemberToken">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApId" Type="Int32" />
+          <Property Name="MemberId" Type="Int32" Nullable="false" />
+          <Property Name="Token" Type="Guid" Nullable="false" />
+          <Property Name="ExpireDate" Type="DateTime" Precision="3" />
+          <Property Name="NewMemberTokenId" Type="Int32" />
+          <Property Name="EntityStatus" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Member" Relationship="FEDSMBRModel.FK_MemberToken_Member" FromRole="MemberToken" ToRole="Member" />
+        </EntityType>
+        <Association Name="FK_MemberToken_Member">
+          <End Type="FEDSMBRModel.Member" Role="Member" Multiplicity="1" />
+          <End Type="FEDSMBRModel.MemberToken" Role="MemberToken" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MemberToken">
+              <PropertyRef Name="MemberId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -389,6 +448,19 @@
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Count" ColumnName="Count" />
                 <ScalarProperty Name="Messages" ColumnName="Messages" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberToken">
+            <EntityTypeMapping TypeName="FEDSMBRModel.MemberToken">
+              <MappingFragment StoreEntitySet="MemberToken">
+                <ScalarProperty Name="EntityStatus" ColumnName="EntityStatus" />
+                <ScalarProperty Name="NewMemberTokenId" ColumnName="NewMemberTokenId" />
+                <ScalarProperty Name="ExpireDate" ColumnName="ExpireDate" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="MemberId" ColumnName="MemberId" />
+                <ScalarProperty Name="ApId" ColumnName="ApId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

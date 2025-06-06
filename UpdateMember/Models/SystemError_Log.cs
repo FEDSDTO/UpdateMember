@@ -9,30 +9,24 @@
 //------------------------------------------------------------------------------
 
 
-namespace UpdateMember.Models.FEDSMBR
+namespace UpdateMember.Models
 {
 
 using System;
     using System.Collections.Generic;
     
-public partial class MemberEmailValid
+public partial class SystemError_Log
 {
 
-    public int Id { get; set; }
+    public long Id { get; set; }
 
-    public int MemberId { get; set; }
+    public string Controller { get; set; }
 
-    public string Email { get; set; }
+    public string Event { get; set; }
 
-    public string Code { get; set; }
+    public Nullable<long> ModifyUser { get; set; }
 
-    public System.DateTime ExpireDate { get; set; }
-
-    public Nullable<System.DateTime> ValidDate { get; set; }
-
-
-
-    public virtual Member Member { get; set; }
+    public Nullable<System.DateTime> ModifyDate { get; set; }
 
 }
 
