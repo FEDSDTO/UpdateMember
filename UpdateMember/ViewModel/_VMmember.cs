@@ -26,6 +26,10 @@ namespace UpdateMember.ViewModel
         {
             public int ID { get; set; }
 
+            public string MemberCardNo { get; set; }
+
+            public string MbToken { get; set; }
+
             public string Name { get; set; }
 
             public string ROCId { get; set; }
@@ -52,6 +56,7 @@ namespace UpdateMember.ViewModel
             public int Status { get; set; }
 
             public string RealVerifyDate { get; set; }
+            public string MobileCarrier { get; set; }
         }
     }
 

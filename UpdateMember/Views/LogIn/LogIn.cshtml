@@ -40,7 +40,7 @@
 
                     </div>
                     <div class="bottom" style="margin-top:-10px;line-height:30px;margin:0 auto">
-                        <input id="btnLogIn" type="button" onfocus="Submit()" onclick="Submit()" style="font-size:20px;width:220px;height:40px;color:#FFFFFF;background-color:#fc9618;border-radius: 10px;border-color:#ffffff" value="登入" />
+                        <input id="btnLogIn" type="button" style="font-size:20px;width:220px;height:40px;color:#FFFFFF;background-color:#fc9618;border-radius: 10px;border-color:#ffffff" value="登入" />
                         @*<input type="checkbox" name="forget" />忘記密碼?*@
                     </div>
 
@@ -68,7 +68,7 @@
             }
         });
 
-        function Submit() {
+        $("#btnLogIn").click(function () {
             var form = $('#LogInForm');
             var data = form.serialize();
             var validator = form.validate();
@@ -94,10 +94,6 @@
                 }
 
             })
-        }
-
-        $("#btnLogIn").click(function () {
-            Submit();
         })
     })
 </script>

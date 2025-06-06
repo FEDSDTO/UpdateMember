@@ -15,20 +15,22 @@ namespace UpdateMember.Models.FEDSMBR
 using System;
     using System.Collections.Generic;
     
-public partial class MemberEmailValid
+public partial class MemberToken
 {
 
     public int Id { get; set; }
 
+    public Nullable<int> ApId { get; set; }
+
     public int MemberId { get; set; }
 
-    public string Email { get; set; }
+    public System.Guid Token { get; set; }
 
-    public string Code { get; set; }
+    public Nullable<System.DateTime> ExpireDate { get; set; }
 
-    public System.DateTime ExpireDate { get; set; }
+    public Nullable<int> NewMemberTokenId { get; set; }
 
-    public Nullable<System.DateTime> ValidDate { get; set; }
+    public int EntityStatus { get; set; }
 
 
 

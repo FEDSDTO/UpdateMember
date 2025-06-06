@@ -13,6 +13,8 @@
         <EntityTypeShape EntityType="FEDSMBRModel.MemberEmailValidDuplicate" Width="1.5" PointX="5.75" PointY="6.75" IsExpanded="true" />
         <AssociationConnector Association="FEDSMBRModel.FK_MemberCellphoneValid_Member" ManuallyRouted="false" />
         <AssociationConnector Association="FEDSMBRModel.FK_MemberEmailValid_Member" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="FEDSMBRModel.MemberToken" Width="1.5" PointX="3" PointY="9.125" />
+        <AssociationConnector Association="FEDSMBRModel.FK_MemberToken_Member" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

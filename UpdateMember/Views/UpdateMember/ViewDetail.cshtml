@@ -12,8 +12,14 @@
     <link href="~/Content/bootstrap.min.css?v0.1" rel="stylesheet" />
 </head>
 <body style="margin:0;padding:0;font-family:'Microsoft JhengHei'">
-    <div style="height:55px;width:90%;border-bottom:2px solid #808080;margin:0 auto;margin-top:20px">
+    <div style="height:55px;width:90%;border-bottom:2px solid #808080;margin:0 auto;margin-top:20px;display:flex;justify-content:space-between">
         <h3 class="title-UserInfo">會員基本資料</h3>
+        <p style="font-size:28px;color:#808080;line-height:1.2;" id="showLogOutTime">
+            <script>
+                //showLogOutTime null 顯示空字串
+                document.getElementById("showLogOutTime").innerText = "自動登出時間：" + (sessionStorage.getItem("showLogOutTime") || "");
+            </script>
+        </p>
     </div>
     @using (Html.BeginForm("ViewDetail", "UpdateMember", FormMethod.Post, new { @id = "UpdateMemberForm" }))
     {
@@ -22,6 +28,7 @@
                 <div class="detail-body" style="line-height:30px;margin-top:40px">
                     <h4 style="font-weight:bold">@Html.DisplayFor(model => model.Name)</h4>
                     <p>ID : @Html.DisplayFor(model => model.ID)</p>
+                    <p>會員卡號：@Html.DisplayFor(model => model.MemberCardNo)</p>
                     <p>身分證 : @Html.DisplayFor(model => model.ROCId)</p>
                     <p>生日 : @Html.DisplayFor(model => model.Birthday)</p>
                     <p>性別 : @Html.DisplayFor(model => model.Gender)</p>
@@ -34,15 +41,16 @@
                     <p>電話驗證日期 : @Html.DisplayFor(model => model.PhoneValidDate)</p>
                     <p>實名制認證 : @Html.DisplayFor(model => model.RealVerifyDate)</p>
                     <p>帳號狀態 : @Html.DisplayFor(model => model.Status)</p>
+                    <p>手機條碼/載具 : @Html.DisplayFor(model => model.MobileCarrier)</p>
                 </div>
             </div>
         </div>
 
     }
-
     <script src="~/Scripts/jquery-3.3.1.js"></script>
     <script src="~/Scripts/bootstrap.js"></script>
     <link href="~/Scripts/fancybox/dist/jquery.fancybox.min.css" rel="stylesheet" />
     <script src="~/Scripts/fancybox/dist/jquery.fancybox.min.js"></script>
+    <script src="~/Scripts/AutoLogOut.js"></script>
 </body>
 </html>
