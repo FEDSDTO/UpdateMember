@@ -31,3 +31,7 @@
 .validation-summary-valid {
     display: none
 }
+
+.textHide{
+    display:none;
+}

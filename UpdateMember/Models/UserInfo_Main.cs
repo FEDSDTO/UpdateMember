@@ -26,6 +26,12 @@ namespace UpdateMember.Models
         public Nullable<System.DateTime> ChangPwdTime { get; set; }
         public bool IsLoggedIn { get; set; }
         public Nullable<System.DateTime> LoggedInTime { get; set; }
+
+        public static explicit operator long(UserInfo_Main v)
+        {
+            throw new NotImplementedException();
+        }
+
         public Nullable<System.DateTime> CreateOn { get; set; }
         public Nullable<int> ModifyUser { get; set; }
         public System.DateTime ModifyTime { get; set; }
