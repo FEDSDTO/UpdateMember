@@ -34,12 +34,13 @@ function getLogOutTime() {
         return "";
     }
     // 取得目前時間並計算差值（毫秒）
-    const currentTime = Date.now();
-    // 剩餘時間 = 登入到期時間 - 目前時間
-    const remainTime = LogOutTime - currentTime;
-
+    const currentTime = Date.now()
+    const timeDifference = sessionStorage.getItem("timeDifference")
+    // 剩餘時間 = 登入到期時間 - (目前時間-本地與系統時間差)
+    const remainTime = LogOutTime - (currentTime - timeDifference)
     // 轉換毫秒為秒、分與小時
     const totalSeconds = Math.floor(remainTime / 1000);
+
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;

@@ -66,7 +66,12 @@ namespace UpdateMember.Controllers
             HttpCookie _HC = new HttpCookie(FormsAuthentication.FormsCookieName, enTicket);
             _HC.Expires = DateTime.Now.AddMinutes(MAX_LOGIN_TIME);
             Response.Cookies.Add(_HC); //將資料存入cookie
+
             _HC = new HttpCookie("LogOutTime", DateTimeOffset.UtcNow.AddMinutes(MAX_LOGIN_TIME).ToUnixTimeMilliseconds().ToString()); //存登入到期時間
+            _HC.Expires = DateTime.Now.AddMinutes(MAX_LOGIN_TIME);
+            Response.Cookies.Add(_HC);
+
+            _HC = new HttpCookie("SystemTime", DateTimeOffset.UtcNow.AddMinutes(0).ToUnixTimeMilliseconds().ToString()); //存系統時間
             _HC.Expires = DateTime.Now.AddMinutes(MAX_LOGIN_TIME);
             Response.Cookies.Add(_HC);
 
