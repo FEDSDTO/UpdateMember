@@ -134,6 +134,10 @@
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
+        if (!sessionStorage.getItem("timeDifference")) {
+            const temp = Date.now() - (getCookie("SystemTime"))
+            sessionStorage.setItem("timeDifference", temp)
+        }
         $('[data-fancybox]').fancybox({
             toolbar: false,
             smallBtn: true,
@@ -231,6 +235,7 @@
                     }).then(function () {
                         deleteCookie("LogOutTime");
                         sessionStorage.removeItem('showLogOutTime');
+                        sessionStorage.removeItem('timeDifference');
                         setTimeout(function () { location.href = "@Url.Action("LogIn", "LogIn")"; }, 0);
                     })
                 }
@@ -240,10 +245,19 @@
     }
     function checkLoginDuration() {
         const LogOutTime = getCookie("LogOutTime")
-        if (Date.now() > LogOutTime) {
+        const currentTime = Date.now()
+        const timeDifference = sessionStorage.getItem("timeDifference")
+        const fixTime = currentTime - timeDifference
+        // 用修正後的時間去判斷
+        if (fixTime > LogOutTime) {
+            //console.log("end: " + currentTime + "  " + fixTime)
             deleteCookie("LogOutTime");
             sessionStorage.removeItem('showLogOutTime');
+            sessionStorage.removeItem('timeDifference');
             location.href = '@Url.Action("Logout", "LogIn")';
+        }
+        else {
+            //console.log(currentTime + "  " + fixTime)
         }
     }
 </script>
